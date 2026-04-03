@@ -25,6 +25,7 @@ keyword Keyword
     | "and"
     | "or"
     | "neg"
+    | "<"
     ;
 
 // ============================================================
@@ -34,7 +35,7 @@ keyword Keyword
 // letter ::= "a" | ... | "z"
 // digit ::= "0" | ... | "9"
 //
-lexical Name = [a-z] [a-z0-9\-]* !>> [a-z0-9\-] ;
+lexical Name = [a-zA-Z][a-zA-Z0-9\-]* !>> [a-zA-Z0-9\-] \ Keywords;
 
 // ============================================================
 // Start symbol
@@ -57,7 +58,7 @@ syntax Import
     = using: "using" Name name
     ;
 
-// definition ::= space | opdeclarator | vardeclarator | rule | exdeclaration
+//definition ::= space | opdeclara | vardeclara | rule | exdeclara
 syntax Definition
     = spaceDef: Space space
     | operatorDef: OpDeclarator op
@@ -71,8 +72,8 @@ syntax Definition
 // ============================================================
 // space ::= "defspace" name [ "<" name ] "end"
 syntax Space
-    = spaceWithParent: "defspace" Name name "<" Name parent "end"
-    | spaceNoParent:   "defspace" Name name "end"
+    = spaceWithParent: "defspace" Name name "<" Name parent "end" 
+    > spaceNoParent:   "defspace" Name name "end"
     ;
 
 // ============================================================
@@ -205,3 +206,4 @@ syntax SymbolicOperator
     | mod: "%"
     | lt: "<"
     ;
+
