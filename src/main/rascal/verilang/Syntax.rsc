@@ -25,7 +25,6 @@ keyword Keyword
     | "and"
     | "or"
     | "neg"
-    | "<"
     ;
 
 // ============================================================
@@ -58,10 +57,9 @@ syntax Import
     = using: "using" Name name
     ;
 
-//definition ::= space | opdeclara | vardeclara | rule | exdeclara
 syntax Definition
     = spaceDef: Space space
-    | operatorDef: OpDeclarator op
+    | opDef: OpDeclarator op
     | variableDef: VarDeclarator var
     | ruleDef: Rule rule
     | expressionDef: ExDeclaration expr
@@ -72,10 +70,13 @@ syntax Definition
 // ============================================================
 // space ::= "defspace" name [ "<" name ] "end"
 syntax Space
-    = spaceWithParent: "defspace" Name name "<" Name parent "end" 
-    > spaceNoParent:   "defspace" Name name "end"
+    = space: "defspace" Name name SubSpaceOpt subSpace "end"
     ;
 
+syntax SubSpaceOpt
+    = noSubSpace:
+    | subSpace: "<" Name parent
+    ;
 // ============================================================
 // Operator definitions
 // ============================================================
@@ -99,7 +100,7 @@ syntax OpApplication
 // ============================================================
 // vardeclarator ::= "defvar" variable { "," variable } "end"
 syntax VarDeclarator
-    = vardeclarator: "defvar" {Variable ","}+ vars "end"
+    = vardeclarator: "defvar" Variable ("," Variable)* "end"
     ;
 
 // variable ::= name ":" domain
